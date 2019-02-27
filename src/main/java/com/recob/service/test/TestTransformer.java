@@ -6,6 +6,7 @@ import com.recob.domain.test.TestSchema;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,10 +22,12 @@ public class TestTransformer implements ITestTransformer {
         TestSchema testSchema = new TestSchema();
 
         testSchema.setAvailableTime(m.getAvailableTime());
-        testSchema.setQuestions(m
-                .getQuestions()
+        // key - question number, value - question
+        Map<Long, Question> questionMap = m.getQuestions()
                 .stream()
-                .collect(Collectors.toMap(Question::getPosition, Function.identity())));
+                .collect(Collectors.toMap(Question::getPosition, Function.identity()));
+
+        testSchema.setQuestions(questionMap);
 
         return testSchema;
     }

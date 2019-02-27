@@ -14,7 +14,6 @@ import java.util.List;
  * {@link Question#position} question position in test
  * {@link Question#questionType} question type
  * {@link Question#options} question options if type IS NOT {@link QuestionType#OPEN}
- * {@link Question#openAnswer} answer on {@link QuestionType#OPEN}
  */
 
 @Data
@@ -25,5 +24,4 @@ public class Question {
     private @NotNull  long         position;
     private @NotNull  QuestionType questionType;
     private @Nullable List<Option> options;
-    private @Nullable String       openAnswer;
 }
