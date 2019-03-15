@@ -20,7 +20,7 @@ import java.util.UUID;
 public class WebSecurityConfiguration {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) throws Exception {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         //@formatter:off
         http
             .addFilterAt(authFilter(), SecurityWebFiltersOrder.AUTHENTICATION)

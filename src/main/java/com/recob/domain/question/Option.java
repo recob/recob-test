@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Option {
 
+    private @NotNull String  id;
     private @NotNull Object  value;
     private @NotNull boolean right;
 }

@@ -2,6 +2,7 @@ package com.recob.service.question;
 
 import com.recob.domain.question.Question;
 import org.springframework.lang.Nullable;
+import reactor.core.publisher.Mono;
 
 public interface IQuestionService {
     /**
@@ -11,4 +12,10 @@ public interface IQuestionService {
      */
     @Nullable
     Question getNextQuestion(long currentQuestion);
+
+    /**
+     * return first question
+     * @return first question
+     */
+    Mono<Question> getFirstQuestion();
 }
