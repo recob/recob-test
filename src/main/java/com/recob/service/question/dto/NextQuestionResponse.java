@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class NextQuestionResponse {
     private @NotNull  String       value;
-    private @NotNull  Long         position;
+    private @NotNull  Long         questionId;
     private @NotNull  QuestionType type;
     private @Nullable List<QuestionOptionResponse> options;
 }

@@ -9,6 +9,9 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ * user answer
+ */
 @Data
 @NoArgsConstructor
 @Entity

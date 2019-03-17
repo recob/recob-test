@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
  * Class contains information about
  * one answer value to specific question
  *
- * {@link Option#value} answer value
- * {@link Option#right} is answer right
+ * {@link QuestionOption#value} answer value
+ * {@link QuestionOption#right} is answer right
  */
 
 @Data
 @NoArgsConstructor
-public class Option {
+public class QuestionOption {
 
     private @NotNull String  id;
     private @NotNull Object  value;

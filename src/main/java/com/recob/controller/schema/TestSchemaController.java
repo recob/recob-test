@@ -19,6 +19,7 @@ import java.security.Principal;
 
 /**
  * controller for uploading test schema
+ * and starting test
  */
 
 @RestController
@@ -44,6 +45,10 @@ public class TestSchemaController {
                 .map(TestSchemaHolder::setTestSchema);
     }
 
+    /**
+     * start current test
+     * will push first question to users
+     */
     @PostMapping("/start")
     public void startTest() {
         testStarter.startTest();

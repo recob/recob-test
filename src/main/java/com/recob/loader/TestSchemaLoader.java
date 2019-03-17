@@ -1,7 +1,7 @@
 package com.recob.loader;
 
 import com.recob.domain.holder.TestSchemaHolder;
-import com.recob.domain.question.Option;
+import com.recob.domain.question.QuestionOption;
 import com.recob.domain.question.Question;
 import com.recob.domain.question.QuestionType;
 import com.recob.domain.test.TestSchema;
@@ -41,15 +41,15 @@ public class TestSchemaLoader implements CommandLineRunner {
             question.setQuestionType(QuestionType.MULTIPLE);
             question.setValue(UUID.randomUUID().toString());
 
-            question.setOptions(new ArrayList<>());
+            question.setQuestionOptions(new ArrayList<>());
 
             for (int j = 0; j < 4; j++) {
-                Option option = new Option();
-                option.setRight(true);
-                option.setValue(UUID.randomUUID().toString());
-                option.setId(UUID.randomUUID().toString());
+                QuestionOption questionOption = new QuestionOption();
+                questionOption.setRight(true);
+                questionOption.setValue(UUID.randomUUID().toString());
+                questionOption.setId(UUID.randomUUID().toString());
 
-                question.getOptions().add(option);
+                question.getQuestionOptions().add(questionOption);
             }
 
             testSchema.getQuestions().put(question.getPosition(), question);

@@ -18,6 +18,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+/**
+ * main stream between client and backend
+ * pushing first question to user
+ * on each answer getting next question
+ */
+
 @Service
 @Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
