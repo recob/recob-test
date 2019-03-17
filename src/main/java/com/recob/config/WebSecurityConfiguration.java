@@ -22,7 +22,8 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         //@formatter:off
-        http
+        http.csrf()
+                .disable()
             .addFilterAt(authFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
             .authorizeExchange()
                 .anyExchange().permitAll();

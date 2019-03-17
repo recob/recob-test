@@ -1,4 +1,4 @@
-package com.recob.controller.ws;
+package com.recob.controller.ws.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recob.controller.ws.dto.AnswerMessage;

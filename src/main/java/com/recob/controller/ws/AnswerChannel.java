@@ -1,8 +1,11 @@
 package com.recob.controller.ws;
 
 import com.recob.controller.ws.dto.AnswerMessage;
-import com.recob.service.answer.AnswerService;
-import com.recob.service.answer.IAnswerService;
+import com.recob.controller.ws.mapper.AnswerMessageMessageMapper;
+import com.recob.service.question.IQuestionService;
+import com.recob.service.question.QuestionService;
+import com.recob.service.question.dto.NextQuestionResponse;
+import com.recob.service.starter.ITestStarter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ public class AnswerChannel implements WebSocketHandler {
 
     private AnswerMessageMessageMapper      mapper;
     private ConfigurableListableBeanFactory beanFactory;
+    private ITestStarter                    testStarter;
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
@@ -40,11 +44,12 @@ public class AnswerChannel implements WebSocketHandler {
 
     private Flux<?> handleMessage(Flux<AnswerMessage> inbound) {
 
-        IAnswerService answerService = beanFactory.createBean(AnswerService.class);
+        IQuestionService questionService = beanFactory.createBean(QuestionService.class);
 
         return Flux.merge(
-                answerService.saveAnswer(inbound),
-                answerService.stream()
+                questionService.getNextQuestion(inbound),
+                questionService.stream(),
+                testStarter.stream()
         );
     }
 

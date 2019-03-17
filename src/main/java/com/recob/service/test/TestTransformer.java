@@ -1,6 +1,6 @@
 package com.recob.service.test;
 
-import com.recob.controller.schema.dto.request.CreateSchemaModel;
+import com.recob.controller.schema.dto.CreateSchemaModel;
 import com.recob.domain.question.Question;
 import com.recob.domain.test.TestSchema;
 import org.springframework.stereotype.Component;

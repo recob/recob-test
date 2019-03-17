@@ -1,4 +1,4 @@
-package com.recob.controller.schema.dto.request;
+package com.recob.controller.schema.dto;
 
 import com.recob.domain.question.Question;
 import lombok.Data;

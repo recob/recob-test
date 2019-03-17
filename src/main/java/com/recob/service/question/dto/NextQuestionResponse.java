@@ -1,4 +1,4 @@
-package com.recob.service.question;
+package com.recob.service.question.dto;
 
 import com.recob.domain.question.QuestionType;
 import lombok.Data;

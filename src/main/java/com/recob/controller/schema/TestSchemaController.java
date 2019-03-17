@@ -1,8 +1,10 @@
 package com.recob.controller.schema;
 
-import com.recob.controller.schema.dto.request.CreateSchemaModel;
+import com.recob.controller.schema.dto.CreateSchemaModel;
 import com.recob.domain.holder.TestSchemaHolder;
+import com.recob.service.starter.ITestStarter;
 import com.recob.service.test.ITestTransformer;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,11 @@ import java.security.Principal;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TestSchemaController {
 
-    private final ITestTransformer testTransformer;
+    private ITestTransformer testTransformer;
+    private ITestStarter     testStarter;
 
     /**
      * upload test schema as file
@@ -39,5 +42,10 @@ public class TestSchemaController {
                 .publishOn(Schedulers.parallel())
                 .transform(testTransformer::transformTestModel)
                 .map(TestSchemaHolder::setTestSchema);
+    }
+
+    @PostMapping("/start")
+    public void startTest() {
+        testStarter.startTest();
     }
 }
