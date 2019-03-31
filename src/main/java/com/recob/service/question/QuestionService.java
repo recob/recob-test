@@ -3,12 +3,10 @@ package com.recob.service.question;
 import com.recob.controller.ws.dto.AnswerMessage;
 import com.recob.domain.answer.Answer;
 import com.recob.domain.holder.TestSchemaHolder;
-import com.recob.domain.question.QuestionOption;
 import com.recob.domain.question.Question;
 import com.recob.domain.test.TestSchema;
 import com.recob.repository.AnswerRepository;
 import com.recob.service.question.dto.NextQuestionResponse;
-import com.recob.service.question.dto.QuestionOptionResponse;
 import com.recob.service.transformer.QuestionTransformer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,8 +64,8 @@ public class QuestionService implements IQuestionService {
                             Answer answer = new Answer();
 
                             answer.setUserId(user);
-                            answer.setAnswerId(answerMessage.getAnswer());
-                            answer.setQuestionId(answerMessage.getQuestionId());
+                            answer.setAnswers(answerMessage.getAnswer());
+                            answer.setQuestionId(answerMessage.getId());
 
                             return answer;
                         }

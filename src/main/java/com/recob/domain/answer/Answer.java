@@ -3,11 +3,9 @@ package com.recob.domain.answer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * user answer
@@ -18,10 +16,9 @@ import javax.validation.constraints.NotNull;
 @Table(name = "answer")
 @IdClass(AnswerId.class)
 public class Answer {
-    @Id
-    private @NotNull String userId;
-    @Id
-    private @NotNull long   questionId;
+    private @NotNull @Id String         userId;
+    private @NotNull @Id long           questionId;
 
-    private @NotNull String answerId;
+    @ElementCollection(targetClass=String.class)
+    private @NotNull     List<String>   answers;
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * Class with information about question
  * and questionOptions to it
  *
- * {@link Question#position} question questionId in test
+ * {@link Question#position} question id in test
  * {@link Question#questionType} question type
  * {@link Question#questionOptions} question questionOptions if type IS NOT {@link QuestionType#OPEN}
  */
