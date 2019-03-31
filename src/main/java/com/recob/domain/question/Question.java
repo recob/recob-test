@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Question {
 
-    private @NotNull  String       value;
+    private @NotNull  String       title;
     private @NotNull  long         position;
     private @NotNull  QuestionType questionType;
     private @Nullable List<QuestionOption> questionOptions;

@@ -39,7 +39,7 @@ public class TestSchemaLoader implements CommandLineRunner {
             Question question = new Question();
             question.setPosition(i);
             question.setQuestionType(QuestionType.MULTIPLE);
-            question.setValue(UUID.randomUUID().toString());
+            question.setTitle(UUID.randomUUID().toString());
 
             question.setQuestionOptions(new ArrayList<>());
 

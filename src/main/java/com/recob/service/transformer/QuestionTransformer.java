@@ -16,7 +16,7 @@ public class QuestionTransformer implements ITransformer <NextQuestionResponse, 
     public NextQuestionResponse transform(Question question) {
         NextQuestionResponse nextQuestionResponse = new NextQuestionResponse();
 
-        nextQuestionResponse.setValue(question.getValue());
+        nextQuestionResponse.setTitle(question.getTitle());
         nextQuestionResponse.setQuestionId(question.getPosition());
         nextQuestionResponse.setType(question.getQuestionType());
         nextQuestionResponse.setOptions(optionTransformer.transformList(question.getQuestionOptions()));

@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class NextQuestionResponse {
-    private @NotNull  String       value;
+    private @NotNull  String       title;
     private @NotNull  Long         questionId;
     private @NotNull  QuestionType type;
     private @Nullable List<QuestionOptionResponse> options;
