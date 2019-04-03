@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: "recob-test"
+spec:
+  hostNetwork: true
+  restartPolicy: Never
+  containers:
+    - name: recob-test
+      image: recob/recob-test
+
