@@ -1,7 +1,6 @@
 package com.recob.service.question;
 
-import com.recob.controller.ws.dto.AnswerMessage;
-import com.recob.domain.question.Question;
+import com.recob.controller.ws.answer.dto.AnswerMessage;
 import com.recob.service.question.dto.NextQuestionResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

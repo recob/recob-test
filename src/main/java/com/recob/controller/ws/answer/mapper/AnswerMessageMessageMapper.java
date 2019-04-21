@@ -1,7 +1,7 @@
-package com.recob.controller.ws.mapper;
+package com.recob.controller.ws.answer.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recob.controller.ws.dto.AnswerMessage;
+import com.recob.controller.ws.answer.dto.AnswerMessage;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.io.buffer.DataBuffer;

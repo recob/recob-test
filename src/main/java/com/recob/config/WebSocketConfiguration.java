@@ -1,6 +1,7 @@
 package com.recob.config;
 
-import com.recob.controller.ws.AnswerChannel;
+import com.recob.controller.ws.answer.AnswerChannel;
+import com.recob.controller.ws.stats.StatsChannel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.HandlerAdapter;
@@ -21,11 +22,24 @@ public class WebSocketConfiguration {
     }
 
     @Bean
-    public HandlerMapping webSocketHandler(AnswerChannel channel) {
+    public HandlerMapping answerHandler(AnswerChannel channel) {
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         Map<String, WebSocketHandler> urlMap = new HashMap<>();
 
         urlMap.put("/stream", channel);
+
+        mapping.setUrlMap(urlMap);
+        mapping.setOrder(0);
+
+        return mapping;
+    }
+
+    @Bean
+    public HandlerMapping statsHandler(StatsChannel channel) {
+        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+        Map<String, WebSocketHandler> urlMap = new HashMap<>();
+
+        urlMap.put("/stats", channel);
 
         mapping.setUrlMap(urlMap);
         mapping.setOrder(0);

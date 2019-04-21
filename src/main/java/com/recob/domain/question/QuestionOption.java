@@ -1,7 +1,6 @@
 package com.recob.domain.question;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,9 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-@NoArgsConstructor
 public class QuestionOption {
-
     private @NotNull String  id;
     private @NotNull Object  value;
     private @NotNull boolean right;

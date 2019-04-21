@@ -1,7 +1,6 @@
-package com.recob.controller.ws.dto;
+package com.recob.controller.ws.answer.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  */
 
 @Data
-@NoArgsConstructor
 public class AnswerMessage {
     private @NotNull long         id;
     private @NotNull List<String> answer;

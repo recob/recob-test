@@ -1,12 +1,12 @@
 package com.recob.service.question;
 
-import com.recob.controller.ws.dto.AnswerMessage;
-import com.recob.domain.answer.Answer;
+import com.recob.controller.ws.answer.dto.AnswerMessage;
 import com.recob.domain.holder.TestSchemaHolder;
 import com.recob.domain.question.Question;
 import com.recob.domain.test.TestSchema;
 import com.recob.repository.AnswerRepository;
 import com.recob.service.question.dto.NextQuestionResponse;
+import com.recob.service.statistic.IStatisticService;
 import com.recob.service.transformer.QuestionTransformer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +29,15 @@ public class QuestionService implements IQuestionService {
 
     private AnswerRepository    answerRepository;
     private QuestionTransformer questionTransformer;
+    private IStatisticService statisticService;
 
     @Override
     public Mono<Void> getNextQuestion(Flux<AnswerMessage> inbound) {
         return inbound
                 .onBackpressureBuffer()
-                .flatMap(this::transformAnswer)
-                .map(answerRepository::save)
-                .map(answer -> getNextQuestion(answer.getQuestionId()))
+                .flatMap(this::saveAnswer)
+                .doOnNext(statisticService::registerAnswer)
+                .map(this::getNextQuestion)
                 .map(questionTransformer::transform)
                 .doOnNext(stream.sink()::next)
                 .then();
@@ -47,29 +48,27 @@ public class QuestionService implements IQuestionService {
         return stream;
     }
 
-    private Question getNextQuestion(long currentQuestion) {
+    private Question getNextQuestion(long nextQuestion) {
         TestSchema testSchema = TestSchemaHolder.getTestSchema();
 
         if (testSchema != null) {
-            long nextQuestion = currentQuestion + 1;
-
             return testSchema.getQuestions().get(nextQuestion);
         }
         return null;
     }
 
-    private Mono<Answer> transformAnswer(AnswerMessage answerMessage) {
+    private Mono<Long> saveAnswer(AnswerMessage answerMessage) {
         return currentUser()
-                .map((user) -> {
-                            Answer answer = new Answer();
+                .map((user) -> saveAnswer(answerMessage, user));
+    }
 
-                            answer.setUserId(user);
-                            answer.setAnswers(answerMessage.getAnswer());
-                            answer.setQuestionId(answerMessage.getId());
-
-                            return answer;
-                        }
-                );
+    private Long saveAnswer(AnswerMessage answerMessage, String user) {
+        return answerRepository.findById(user)
+                .map(a -> {
+                    a.getAnswerMap().put(answerMessage.getId(), answerMessage.getAnswer());
+                    answerRepository.save(a);
+                    return answerMessage.getId() + 1;
+                }).orElse(0L);
     }
 
     private static Mono<String> currentUser() {
