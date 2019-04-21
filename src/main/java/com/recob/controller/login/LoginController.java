@@ -29,7 +29,7 @@ public class LoginController {
         RecobUser savedUser = saveUser(requestAuth);
 
         HttpCookie cookie = ResponseCookie.from("Authorization", savedUser.getId())
-                .path("/")
+                .maxAge(60_000_000_000L)
                 .build();
 
         return ResponseEntity.ok()

@@ -26,7 +26,7 @@ public class WebSecurityConfiguration {
                 .pathMatchers("/stats").permitAll()
                 .pathMatchers("/start").permitAll()
                 .pathMatchers("/schema").permitAll()
-                .pathMatchers("/login").permitAll()
+                .pathMatchers("/auth").permitAll()
                 .anyExchange().authenticated();
         //@formatter:on
         return http.build();
