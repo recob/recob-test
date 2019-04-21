@@ -1,18 +1,14 @@
 package com.recob.controller.login;
 
-import com.recob.controller.login.dto.RequestAuth;
+import com.recob.domain.answer.UserAnswer;
 import com.recob.domain.user.RecobUser;
-import com.recob.repository.RecobUserRepository;
+import com.recob.repository.AnswerRepository;
+import com.recob.service.user.IRecobUserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -21,27 +17,23 @@ import java.util.UUID;
 @CrossOrigin
 public class LoginController {
 
-    private RecobUserRepository userRepository;
+    private IRecobUserService userService;
+    private AnswerRepository  answerRepository;
 
-    @PostMapping("/auth")
-    public ResponseEntity auth(@RequestBody RequestAuth requestAuth) {
+    @GetMapping("/auth")
+    public RecobUser auth(@RequestParam String name) {
 
-        RecobUser savedUser = saveUser(requestAuth);
-
-        HttpCookie cookie = ResponseCookie.from("Authorization", savedUser.getId())
-                .maxAge(60_000_000_000L)
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+        return saveUser(name);
     }
 
-    private RecobUser saveUser(@RequestBody RequestAuth requestAuth) {
+    private RecobUser saveUser(@RequestBody String name) {
         RecobUser user = new RecobUser();
 
         user.setId(UUID.randomUUID().toString());
-        user.setName(requestAuth.getName());
+        user.setName(name);
 
-        return userRepository.save(user);
+        answerRepository.save(new UserAnswer(user.getId(), new HashMap<>()));
+
+        return userService.saveUser(user);
     }
 }
