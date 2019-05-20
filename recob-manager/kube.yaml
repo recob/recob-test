@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recob-manager
+  labels:
+    app: recob-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recob-manager
+  template:
+    metadata:
+      labels:
+        app: recob-manager
+    spec:
+      containers:
+        - name: recob-manager
+          image: recob/recob-manager
+          imagePullPolicy: Never
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: manager
+spec:
+  selector:
+    app: recob-manager
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
