@@ -11,5 +11,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AnswerStatistic {
-    private String id;
+    private long connected;
+    private long finished;
 }

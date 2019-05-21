@@ -2,10 +2,12 @@ package com.recob.controller.ws.answer;
 
 import com.recob.controller.ws.answer.dto.AnswerMessage;
 import com.recob.controller.ws.answer.mapper.AnswerMessageMapper;
+import com.recob.service.question.IQuestionService;
 import com.recob.service.question.QuestionService;
 import com.recob.service.starter.ISurveyManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
@@ -25,9 +27,9 @@ import reactor.core.scheduler.Schedulers;
 @AllArgsConstructor
 public class AnswerChannel implements WebSocketHandler {
 
-    private AnswerMessageMapper mapper;
-    private QuestionService     questionService;
-    private ISurveyManager      surveyManager;
+    private AnswerMessageMapper             mapper;
+    private ISurveyManager                  surveyManager;
+    private ConfigurableListableBeanFactory beanFactory;
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
@@ -45,6 +47,8 @@ public class AnswerChannel implements WebSocketHandler {
     }
 
     private Flux<?> handleMessage(Flux<AnswerMessage> inbound) {
+
+        IQuestionService questionService = beanFactory.createBean(QuestionService.class);
 
         return Flux.merge(
                 questionService.getNextQuestion(inbound),

@@ -12,6 +12,7 @@ import com.recob.service.user.IRecobUserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -26,6 +27,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @AllArgsConstructor
+@CrossOrigin
 public class SurveysController {
 
     private ISurveyManager    surveyManager;

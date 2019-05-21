@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionService implements IQuestionService {
 
-    private final Map<String, DirectProcessor<NextQuestionResponse>> streamMap = new HashMap<>();
+    private final DirectProcessor<NextQuestionResponse> stream = DirectProcessor.create();
 
     private AnswerRepository       answerRepository;
     private IStatisticService      statisticService;
@@ -48,25 +48,17 @@ public class QuestionService implements IQuestionService {
     @Override
     public Mono<Void> getNextQuestion(Flux<AnswerMessage> inbound) {
         return inbound
-                .onBackpressureBuffer()
                 .flatMap(this::saveAnswer)
                 .doOnNext(statisticService::registerAnswer)
-                .filter(this::nextQuestionExists)
-                .map(this::getNextQuestion)
-                .map(questionTransformer::transform)
-                .zipWith(currentUser())
-                .doOnNext(z -> sendNextQuestion(z.getT1(), z.getT2()))
+                .map(this::getNextQuestionResponse)
+                .doOnNext(stream.sink()::next)
                 .then();
     }
 
 
     @Override
     public Flux<NextQuestionResponse> stream() {
-        return currentUser().map(u -> {
-            DirectProcessor<NextQuestionResponse> stream = DirectProcessor.create();
-            streamMap.put(u, stream);
-            return stream;
-        }).flatMapMany(stream -> stream);
+        return stream;
     }
 
     @Override
@@ -91,14 +83,6 @@ public class QuestionService implements IQuestionService {
         launch.setAnswers(answerMap);
 
         return launchRepository.save(launch);
-    }
-
-    private boolean nextQuestionExists(Long questionId) {
-        return SurveyHolder.getSurvey().getQuestions().containsKey(questionId + 1);
-    }
-
-    private void sendNextQuestion(NextQuestionResponse nextQuestionResponse, String user) {
-        streamMap.get(user).sink().next(nextQuestionResponse);
     }
 
     private void validateQuestions(UserAnswer userAnswer, Survey survey, Map<String, RecobUser> userMap, Map<SurveyUser, List<ValidatedAnswer>> answerMap) {
@@ -151,10 +135,29 @@ public class QuestionService implements IQuestionService {
         return Mono.never();
     }
 
+    private NextQuestionResponse getNextQuestionResponse(long nextQuestion) {
+        Question question = getNextQuestion(nextQuestion);
+
+        if (question != null) {
+            return questionTransformer.transform(question);
+        }
+
+        NextQuestionResponse lastMessage = new NextQuestionResponse();
+        lastMessage.setDone(true);
+
+        return lastMessage;
+
+    }
+
     private Question getNextQuestion(long nextQuestion) {
         Survey survey = SurveyHolder.getSurvey();
+        nextQuestion += 1;
 
-        return survey.getQuestions().get(nextQuestion + 1);
+        if (survey.getQuestions().containsKey(nextQuestion)) {
+            return survey.getQuestions().get(nextQuestion);
+        }
+
+        return null;
     }
 
     private Mono<Long> saveAnswer(AnswerMessage answerMessage) {

@@ -12,5 +12,6 @@ public class NextQuestionResponse {
     private @NotNull  String       title;
     private @NotNull  String       id;
     private @NotNull  QuestionType type;
+    private @NotNull  boolean      done;
     private @Nullable List<QuestionOptionResponse> options;
 }
