@@ -1,1 +1,1 @@
-org.springframework.boot.context.properties.EnableConfigurationProperties=recob.starter.RecobStarterConfiguration
+org.springframework.boot.context.properties.EnableConfigurationProperties=com.recob.starter.RecobStarterConfiguration

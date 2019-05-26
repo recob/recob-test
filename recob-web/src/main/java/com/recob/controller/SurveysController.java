@@ -1,5 +1,6 @@
 package com.recob.controller;
 
+import com.recob.client.ManagerClient;
 import com.recob.domain.launch.SurveyLaunch;
 import com.recob.domain.model.SurveyModel;
 import com.recob.domain.model.SurveyResponse;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -28,6 +30,7 @@ public class SurveysController {
 
     private ISurveyService       surveyService;
     private ISurveyLaunchService surveyLaunchService;
+    private ManagerClient        managerClient;
     private ITransformer<SurveyResponse, Survey> surveyTransformer;
 
     @GetMapping("/surveys")
@@ -59,6 +62,14 @@ public class SurveysController {
     public Flux<SurveyLaunch> getSurveyLaunches(@PathVariable(name = "id") String surveyId) {
         return surveyLaunchService.findBySurveyId(surveyId);
     }
+
+    @GetMapping("/surveys/{id}/start")
+    public Map<String, Object> createService(@PathVariable(name = "id") String surveyId) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("surveyId", surveyId);
+        return managerClient.create(body);
+    }
+
 
     private Survey transformSaveRequest(SurveyModel surveyModel) {
         Survey survey = new Survey();

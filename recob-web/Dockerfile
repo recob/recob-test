@@ -1,5 +1,5 @@
 FROM recob/base as build
-WORKDIR /workspace/survey
+WORKDIR /workspace/web
 
 COPY pom.xml .
 COPY src src
@@ -8,7 +8,7 @@ RUN mvn install -Dmaven.test.skip=true
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM openjdk:8-jdk-alpine
-ARG DEPENDENCY=/workspace/survey/target/dependency
+ARG DEPENDENCY=/workspace/web/target/dependency
 VOLUME /tmp
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF

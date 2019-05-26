@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class SurveyManager implements ISurveyManager {
 
     @Override
     public void stopSurvey() {
-        stream.sink().next(null);
+//        stream.sink().next(Mono.empty());
     }
 
     @Override

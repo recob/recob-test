@@ -5,7 +5,7 @@ import com.recob.domain.launch.SurveyLaunch;
 import com.recob.domain.model.SurveyResponse;
 import com.recob.domain.survey.Survey;
 import com.recob.domain.user.RecobUser;
-import com.recob.service.question.IQuestionService;
+import com.recob.service.result.ISurveyResultService;
 import com.recob.service.starter.ISurveyManager;
 import com.recob.service.transform.ITransformer;
 import com.recob.service.user.IRecobUserService;
@@ -30,9 +30,9 @@ import java.util.List;
 @CrossOrigin
 public class SurveysController {
 
-    private ISurveyManager    surveyManager;
-    private IRecobUserService recobUserService;
-    private IQuestionService  questionService;
+    private ISurveyManager       surveyManager;
+    private IRecobUserService    recobUserService;
+    private ISurveyResultService surveyResultService;
     private ITransformer<SurveyResponse, Survey> surveyTransformer;
 
     /**
@@ -42,6 +42,9 @@ public class SurveysController {
      */
     @PostMapping("/survey/start")
     public StartSurveyResponse startSurvey() {
+
+        SurveyHolder.startSurvey();
+
         surveyManager.startSurvey();
 
         List<RecobUser> users = recobUserService.findAll();
@@ -53,7 +56,7 @@ public class SurveysController {
     @PostMapping("/survey/stop")
     public Mono<SurveyLaunch> stopSurvey() {
         surveyManager.stopSurvey();
-        return questionService.validateQuestions();
+        return surveyResultService.validateAnswers();
     }
 
     @Data

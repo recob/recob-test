@@ -1,11 +1,10 @@
 package com.recob.service;
 
-import com.recob.domain.ApplicationType;
 import reactor.core.publisher.Mono;
 
 public interface IApplicationManager {
 
-    Mono<CreateApplicationResponse> createApplication(ApplicationType type);
+    Mono<CreateApplicationResponse> createApplication(String surveyId);
 
     void registerApplication(String host, Long port, String applicationUUID);
 }

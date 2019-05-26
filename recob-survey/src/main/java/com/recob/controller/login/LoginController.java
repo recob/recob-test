@@ -3,6 +3,7 @@ package com.recob.controller.login;
 import com.recob.domain.answer.UserAnswer;
 import com.recob.domain.user.RecobUser;
 import com.recob.map.AnswerRepository;
+import com.recob.service.statistic.IStatisticService;
 import com.recob.service.user.IRecobUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class LoginController {
 
     private IRecobUserService userService;
     private AnswerRepository  answerRepository;
+    private IStatisticService statisticService;
 
     @GetMapping("/auth")
     public RecobUser auth(@RequestParam String name) {
@@ -33,6 +35,8 @@ public class LoginController {
 
         answerRepository.save(new UserAnswer(user.getId(), new HashMap<>()));
 
-        return userService.saveUser(user);
+        user = userService.saveUser(user);
+        statisticService.registerUser();
+        return user;
     }
 }

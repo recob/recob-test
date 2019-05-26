@@ -2,11 +2,13 @@ package com.recob.service.statistic;
 
 import com.recob.domain.AnswerStatistic;
 import com.recob.domain.holder.SurveyHolder;
+import com.recob.map.AnswerRepository;
 import com.recob.map.RecobUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,6 +28,16 @@ public class StatisticService implements IStatisticService {
                     .next(new AnswerStatistic(userRepository.count(), finishedUserCount.incrementAndGet()));
         }
 
+    }
+
+    @Override
+    public void registerUser() {
+        stream.sink().next(new AnswerStatistic(userRepository.count(), finishedUserCount.get()));
+    }
+
+    @Override
+    public Mono<?> getStartedValues() {
+        return Mono.just(new AnswerStatistic(userRepository.count(), finishedUserCount.get()));
     }
 
     @Override

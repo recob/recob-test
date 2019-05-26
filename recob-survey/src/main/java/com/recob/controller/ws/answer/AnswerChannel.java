@@ -2,8 +2,10 @@ package com.recob.controller.ws.answer;
 
 import com.recob.controller.ws.answer.dto.AnswerMessage;
 import com.recob.controller.ws.answer.mapper.AnswerMessageMapper;
+import com.recob.domain.holder.SurveyHolder;
 import com.recob.service.question.IQuestionService;
 import com.recob.service.question.QuestionService;
+import com.recob.service.result.ISurveyResultService;
 import com.recob.service.starter.ISurveyManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class AnswerChannel implements WebSocketHandler {
 
     private AnswerMessageMapper             mapper;
     private ISurveyManager                  surveyManager;
+    private ISurveyResultService            surveyResultService;
     private ConfigurableListableBeanFactory beanFactory;
 
     @Override
@@ -54,7 +57,8 @@ public class AnswerChannel implements WebSocketHandler {
                 questionService.getNextQuestion(inbound),
                 questionService.stream(),
                 questionService.getStartedQuestions(),
-                surveyManager.stream()
+                surveyManager.stream(),
+                surveyResultService.stream()
         );
     }
 

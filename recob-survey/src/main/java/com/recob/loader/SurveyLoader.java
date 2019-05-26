@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -27,10 +28,11 @@ public class SurveyLoader implements CommandLineRunner {
     }
 
     private void findSurvey() {
-//        String surveyId = environment.getProperty("surveyId");
+        String surveyId = environment.getProperty("SURVEY_ID");
 
-        String surveyId = "5ce30c420f378e391c9710ca";
+//        surveyId = "5ce30c420f378e391c9710ca";
         if (StringUtils.isEmpty(surveyId)) {
+            log.info("[findSurvey] can't find survey");
             System.exit(0);
         }
 

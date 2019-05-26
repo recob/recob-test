@@ -41,6 +41,9 @@ public class DashboardChannel implements WebSocketHandler {
     }
 
     private Flux<?> handleMessage(Object unused) {
-        return statisticService.stream();
+        return Flux.merge(
+                statisticService.stream(),
+                statisticService.getStartedValues()
+        );
     }
 }

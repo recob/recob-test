@@ -1,4 +1,4 @@
-package recob.starter;
+package com.recob.starter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,16 +26,18 @@ public class RegisterApplicationListener implements ApplicationListener<Applicat
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         String managerHost = environment.getProperty("MANAGER_SERVICE_HOST");
         Long port = Long.valueOf(Objects.requireNonNull(environment.getProperty("local.server.port")));
-        String applicationUUID = environment.getProperty("recob.uuid");
+        String applicationUUID = environment.getProperty("RECOB_UUID");
 
         registerApplication(managerHost, port, applicationUUID);
     }
 
     private void registerApplication(String managerHost, Long port, String applicationUUID) {
+        System.out.println("manager host " + managerHost);
+        System.out.println("port " + port);
 
         RegisterApplicationBody body = new RegisterApplicationBody(port, applicationUUID);
 
-        log.info("sending start application on {} with port {} and appUuid {}", managerHost, port, applicationUUID);
+        System.out.println("sending start application on {} with port {} and appUuid {}");
         WebClient.builder()
                 .baseUrl(buildManagerURI(managerHost))
                 .build()
@@ -45,12 +47,12 @@ public class RegisterApplicationListener implements ApplicationListener<Applicat
                 .subscribe(r -> {
                     log.info(r.statusCode().toString());
                     if (!r.statusCode().is2xxSuccessful()) {
-                        log.info("[registerApplication] can't register application");
-                        System.exit(0);
+                        System.out.println("[registerApplication] can't register application");
+//                        System.exit(0);
                     }
 
                     r.bodyToMono(String.class)
-                            .subscribe(log::info);
+                            .subscribe(System.out::println);
                 });
     }
 

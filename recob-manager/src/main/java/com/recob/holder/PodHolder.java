@@ -12,8 +12,27 @@ public class PodHolder {
         put(ApplicationType.test, PodHolder::getTestPod);
     }};
 
-    public static V1Pod getPod(ApplicationType type, String uuid) {
-        return podMap.get(type).apply(uuid);
+    public static V1Pod getPod(String surveyId, String uuid) {
+        V1Pod pod = podMap.get(ApplicationType.test).apply(uuid);
+
+        V1EnvVar var = new V1EnvVar();
+
+        var.setName("SURVEY_ID");
+        var.setValue(surveyId);
+
+        pod.getSpec().getContainers().get(0).getEnv().add(var);
+
+        V1EnvVar var2 = new V1EnvVar();
+
+        var2.setName("SPRING_DATA_MONGODB_URI");
+        V1EnvVarSource source = new V1EnvVarSource();
+        V1SecretKeySelector secretKeySelector = new V1SecretKeySelector();
+        secretKeySelector.setKey("uri");
+        secretKeySelector.setName("mongo");
+        source.setSecretKeyRef(secretKeySelector);
+        var2.setValueFrom(source);
+        pod.getSpec().getContainers().get(0).getEnv().add(var2);
+        return pod;
     }
 
     private static V1Pod getTestPod(String uuid) {
@@ -41,8 +60,7 @@ public class PodHolder {
         V1Container container = new V1Container();
 
         container.setName("recob-test");
-        container.setImage("recob/recob-test");
-        container.setImagePullPolicy("Never");
+        container.setImage("recob/survey");
         container.setEnv(getTestEnv(uuid));
 
         return Collections.singletonList(container);

@@ -1,6 +1,5 @@
 package com.recob.service;
 
-import com.recob.domain.ApplicationType;
 import com.recob.holder.PodHolder;
 import io.kubernetes.client.ApiException;
 import io.kubernetes.client.apis.CoreV1Api;
@@ -24,22 +23,22 @@ import java.util.UUID;
 public class ApplicationManager implements IApplicationManager {
 
     private final Map<String, RegisterInfo> registerMap = new HashMap<>();
-    private final String INTERNAL_IP = "InternalIP";
+    private final String EXTERNAL_IP = "ExternalIP";
 
     private CoreV1Api api;
 
     @Override
-    public Mono<CreateApplicationResponse> createApplication(ApplicationType type) {
+    public Mono<CreateApplicationResponse> createApplication(String surveyId) {
         String uuid = UUID.randomUUID().toString();
         log.info("[createApplication] creating application {}", uuid);
 
         String podName;
         try {
-            V1Pod pod = startApplication(type, uuid);
+            V1Pod pod = startApplication(surveyId, uuid);
             podName = pod.getMetadata().getName();
 
         } catch (ApiException e) {
-            log.info("[createApplication] exception while creating application {}", type, e);
+            log.info("[createApplication] exception while creating application {}", surveyId, e);
             return Mono.empty();
         }
 
@@ -52,6 +51,7 @@ public class ApplicationManager implements IApplicationManager {
 
         RegisterInfo registerInfo = registerMap.get(applicationUUID);
         if (registerInfo != null) {
+            registerMap.remove(applicationUUID);
             registerInfo.getSink().success(new CreateApplicationResponse(getIp(registerInfo.getPodName()), port));
         }
     }
@@ -65,7 +65,7 @@ public class ApplicationManager implements IApplicationManager {
             return v1Node.getStatus()
                     .getAddresses()
                     .stream()
-                    .filter(a -> INTERNAL_IP.equals(a.getType()))
+                    .filter(a -> EXTERNAL_IP.equals(a.getType()))
                     .findFirst()
                     .map(V1NodeAddress::getAddress)
                     .orElse(null);
@@ -76,8 +76,8 @@ public class ApplicationManager implements IApplicationManager {
         }
     }
 
-    private V1Pod startApplication(ApplicationType type, String uuid) throws ApiException {
-        return api.createNamespacedPod("default", PodHolder.getPod(type, uuid), null, null, null);
+    private V1Pod startApplication(String surveyId, String uuid) throws ApiException {
+        return api.createNamespacedPod("default", PodHolder.getPod(surveyId, uuid), null, null, null);
     }
 
 

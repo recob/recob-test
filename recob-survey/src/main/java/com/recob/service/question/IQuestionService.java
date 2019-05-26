@@ -36,5 +36,4 @@ public interface IQuestionService {
      */
     Mono<NextQuestionResponse> getStartedQuestions();
 
-    Mono<SurveyLaunch> validateQuestions();
 }

@@ -10,14 +10,34 @@
     <packaging>pom</packaging>
 
 
-    <modules>
-        <module>recob-domain</module>
-        <module>recob-repository</module>
-        <module>recob-service</module>
-        <module>recob-manager</module>
-        <module>recob-survey</module>
-        <module>recob-starter</module>
-        <module>recob-web</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>base</id>
+
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <modules>
+                <module>recob-domain</module>
+                <module>recob-repository</module>
+                <module>recob-service</module>
+                <module>recob-starter</module>
+            </modules>
+
+        </profile>
+
+        <profile>
+            <id>other</id>
+
+            <modules>
+                <module>recob-manager</module>
+                <module>recob-survey</module>
+                <module>recob-web</module>
+            </modules>
+        </profile>
+    </profiles>
+
+
 
 </project>

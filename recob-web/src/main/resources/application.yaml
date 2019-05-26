@@ -1,2 +1,7 @@
 server:
   port: 9999
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://recob:nWiiJFLoBAGqHtWf@recob-q78ib.mongodb.net/test?retryWrites=true&maxPoolSize=1

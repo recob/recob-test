@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.io.File;
 import java.io.IOException;
 
 @Configuration
@@ -20,6 +21,6 @@ public class KubernetesConfig {
     @Bean
     @Profile("dev")
     public CoreV1Api devApi() throws IOException {
-        return new CoreV1Api(Config.defaultClient());
+        return new CoreV1Api(Config.fromConfig("/home/misha/.kube/recob-kubeconfig.yaml"));
     }
 }
