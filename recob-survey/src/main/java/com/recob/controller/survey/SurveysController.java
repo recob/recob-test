@@ -12,9 +12,8 @@ import com.recob.service.user.IRecobUserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -30,14 +29,26 @@ import java.util.List;
 @CrossOrigin
 public class SurveysController {
 
-    private ISurveyManager       surveyManager;
-    private IRecobUserService    recobUserService;
+    private ISurveyManager surveyManager;
+    private IRecobUserService recobUserService;
     private ISurveyResultService surveyResultService;
     private ITransformer<SurveyResponse, Survey> surveyTransformer;
+
+    @RequestMapping(value = "/survey/**", method = RequestMethod.OPTIONS)
+    public ResponseEntity<Object> corsHeaders() {
+        log.info("[corsHeaders] setting cors headers");
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                .header("Access-Control-Max-Age", "3600")
+                .build();
+
+    }
 
     /**
      * start current test
      * will push first question to users
+     *
      * @return userList
      */
     @PostMapping("/survey/start")
