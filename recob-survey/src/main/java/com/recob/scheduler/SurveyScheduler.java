@@ -13,14 +13,14 @@ public class SurveyScheduler {
 
     private RecobUserRepository recobUserRepository;
 
-    @Scheduled(fixedDelay = 1, initialDelay = 1000 * 60 * 20)
+//    @Scheduled(fixedDelay = 1, initialDelay = 1000 * 60 * 5)
     public void checkConnections() {
         if (recobUserRepository.count() == 0) {
             System.exit(0);
         }
     }
 
-    @Scheduled(fixedDelay = 1, initialDelay = 1000 * 60 * 60)
+//    @Scheduled(fixedDelay = 1, initialDelay = 1000 * 60 * 60)
     public void exit() {
         System.exit(0);
     }

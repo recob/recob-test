@@ -45,7 +45,12 @@ public class SurveyResultService implements ISurveyResultService {
         Map<SurveyUser, SurveyUserResponse> answerMap = new HashMap<>();
         answerRepository.findAll().forEach(a -> validateQuestions(a, survey, userMap, answerMap));
 
-        answerMap.forEach((u, a) -> streamMap.get(u.getId()).sink().next(a));
+        answerMap.forEach((u, a) -> {
+            DirectProcessor<Object> stream = streamMap.get(u.getId());
+            if (stream != null) {
+                stream.sink().next(a);
+            }
+        });
 
         SurveyLaunch launch = new SurveyLaunch();
         launch.setDate(new Date());

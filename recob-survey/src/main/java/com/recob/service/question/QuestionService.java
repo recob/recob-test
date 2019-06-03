@@ -61,7 +61,7 @@ public class QuestionService implements IQuestionService {
             if (SurveyHolder.hasSurveyStarted()) {
                 long maxQuestionId = userAnswer.getAnswerMap().keySet().stream().mapToLong(l -> l).max().orElse(-1);
 
-                Question nextQuestion = getNextQuestion(maxQuestionId + 1);
+                Question nextQuestion = getNextQuestion(maxQuestionId);
                 return Mono.just(questionTransformer.transform(nextQuestion));
             }
        }

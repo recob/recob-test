@@ -34,17 +34,6 @@ public class SurveysController {
     private ISurveyResultService surveyResultService;
     private ITransformer<SurveyResponse, Survey> surveyTransformer;
 
-    @RequestMapping(value = "/survey/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<Object> corsHeaders() {
-        log.info("[corsHeaders] setting cors headers");
-        return ResponseEntity.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-                .header("Access-Control-Max-Age", "3600")
-                .build();
-
-    }
-
     /**
      * start current test
      * will push first question to users
@@ -66,8 +55,17 @@ public class SurveysController {
 
     @PostMapping("/survey/stop")
     public Mono<SurveyLaunch> stopSurvey() {
-        surveyManager.stopSurvey();
-        return surveyResultService.validateAnswers();
+
+        Mono<SurveyLaunch> surveyLaunchMono = Mono.never();
+        try {
+
+            surveyManager.stopSurvey();
+            surveyLaunchMono = surveyResultService.validateAnswers();
+        } catch (Exception e) {
+            log.info("[stopSurvey] exception during stopping survey", e);
+        }
+
+        return surveyLaunchMono;
     }
 
     @Data

@@ -3,5 +3,5 @@ spring:
     mongodb:
       repositories:
         type: reactive
-server:
-  port: 0
+#server:
+#  port: 0

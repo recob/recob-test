@@ -19,6 +19,7 @@ public class CreateApplicationController {
 
     @PostMapping("/create")
     public Mono<CreateApplicationResponse> createApplication(@RequestBody Mono<CreateApplicationRequest> request) {
-        return request.flatMap(r -> applicationManager.createApplication(r.getSurveyId()));
+//        return request.flatMap(r -> applicationManager.createApplication(r.getSurveyId()));
+        return Mono.just(new CreateApplicationResponse("survey.recob.me", 443L));
     }
 }

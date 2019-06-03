@@ -10,6 +10,7 @@ import com.recob.service.launch.ISurveyLaunchService;
 import com.recob.service.survey.ISurveyService;
 import com.recob.service.transform.ITransformer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -26,6 +27,7 @@ import java.util.stream.LongStream;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
+@Slf4j
 public class SurveysController {
 
     private ISurveyService       surveyService;
@@ -72,27 +74,32 @@ public class SurveysController {
 
 
     private Survey transformSaveRequest(SurveyModel surveyModel) {
+        log.debug("[transformSaveRequest] transforming request");
         Survey survey = new Survey();
 
-        survey.setAvailableTime(surveyModel.getAvailableTime());
-        // key - question number, value - question
-        Map<Long, Question> questionMap = LongStream.range(0, surveyModel.getQuestions().size())
-                .boxed()
-                .collect(Collectors.toMap(Function.identity(), l -> {
+        try {
+            survey.setAvailableTime(surveyModel.getAvailableTime());
+            // key - question number, value - question
+            Map<Long, Question> questionMap = LongStream.range(0, surveyModel.getQuestions().size())
+                    .boxed()
+                    .collect(Collectors.toMap(Function.identity(), l -> {
 
-                    Question question = surveyModel.getQuestions().get(l.intValue());
-                    question.setPosition(l);
+                        Question question = surveyModel.getQuestions().get(l.intValue());
+                        question.setPosition(l);
 
-                    if (!CollectionUtils.isEmpty(question.getOptions())) {
-                        question.getOptions().forEach(o -> o.setId(UUID.randomUUID().toString()));
-                    }
+                        if (!CollectionUtils.isEmpty(question.getOptions())) {
+                            question.getOptions().forEach(o -> o.setId(UUID.randomUUID().toString()));
+                        }
 
-                    return question;
-                }));
+                        return question;
+                    }));
 
-        survey.setTitle(surveyModel.getTitle());
-        survey.setQuestions(questionMap);
-        survey.setThumbnail(surveyModel.getThumbnail());
+            survey.setTitle(surveyModel.getTitle());
+            survey.setQuestions(questionMap);
+            survey.setThumbnail(surveyModel.getThumbnail());
+        } catch (Exception e) {
+            log.error("[transformSaveRequest] error ", e);
+        }
 
         return survey;
     }

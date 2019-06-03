@@ -30,7 +30,7 @@ public class SurveyLoader implements CommandLineRunner {
     private void findSurvey() {
         String surveyId = environment.getProperty("SURVEY_ID");
 
-//        surveyId = "5ce30c420f378e391c9710ca";
+        surveyId = "5cf58deebf7bed000111996f";
         if (StringUtils.isEmpty(surveyId)) {
             log.info("[findSurvey] can't find survey");
             System.exit(0);
